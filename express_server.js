@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
-const getRandom = require('./util/getRandom');
+const {generateRandomString} = require('./util/getRandom');
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
@@ -19,6 +19,16 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+app.get("/u/:id", (req, res, next) => {
+  const longURL = urlDatabase[req.params.id];
+  if (!longURL) {
+    res.status(404).send('URL not found');
+    next();
+  } else {
+    res.redirect(longURL);
+  }
+});
+
 /**
  * @description: This endpoint renders an html view urlDatabase
  */
@@ -30,8 +40,14 @@ app.get("/urls", (req, res) => {
  * @description: This endpoint endpoint creates a new entry in the urlDatabase
  */
 app.post("/urls", (req, res) => {
-  console.log(req.body); // Log the POST request body to the console
-  res.send("Ok"); // Respond with 'Ok' (we will replace this)
+
+  let shortCode = generateRandomString();
+  while (urlDatabase[shortCode]) {
+    shortCode = generateRandomString();
+  }
+  urlDatabase[shortCode] = req.body.longURL;
+
+  res.redirect(`/urls/${shortCode}`);
 });
 
 /**
