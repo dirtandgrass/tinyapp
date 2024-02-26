@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
-const {generateRandomString} = require('./util/getRandom');
+const {generateRandomString, isValidUrl} = require('./util/urlUtil');
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
@@ -40,6 +40,11 @@ app.get("/urls", (req, res) => {
  * @description: This endpoint endpoint creates a new entry in the urlDatabase
  */
 app.post("/urls", (req, res) => {
+
+  if (!isValidUrl(req.body.longURL)) {
+    res.status(400).send('Invalid URL');
+    return;
+  }
 
   let shortCode = generateRandomString();
   while (urlDatabase[shortCode]) {
