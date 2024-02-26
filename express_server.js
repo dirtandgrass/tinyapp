@@ -26,6 +26,13 @@ app.get("/urls", (req, res) => {
 });
 
 /**
+ * @description: This endpoint renders an html view of a form to create a new entry in the urlDatabase
+ */
+app.get("/urls/new", (req, res) => {
+  res.render("urls_new");
+});
+
+/**
  * @description: This endpoint renders an html view of an entry in the urlDatabase
  */
 app.get("/urls/:shortCode", (req, res) => {
