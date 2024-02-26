@@ -11,37 +11,29 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+/**
+ * @description: This endpoint renders the json of the urlDatabase
+ */
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+/**
+ * @description: This endpoint renders an html view urlDatabase
+ */
 app.get("/urls", (req, res) => {
   res.render("urls_index", { urls: urlDatabase });
 });
 
-
+/**
+ * @description: This endpoint renders an html view of an entry in the urlDatabase
+ */
 app.get("/urls/:shortCode", (req, res) => {
   const templateVars = { id: req.params.shortCode, longURL: urlDatabase[req.params.shortCode] };
   res.render("urls_show", templateVars);
 });
 
 
-app.get("/hello", (req, res) => {
-  const templateVars = { greeting: "Hello World!" };
-  res.render("hello_world", templateVars);
-});
-
-// app.get("/hello", (req, res) => {
-//   res.send("<html><body>Hello <b>World</b></body></html>\n");
-// });
-// app.get("/set", (req, res) => {
-//   const a = 1;
-//   res.send(`a = ${a}`);
-// });
-
-// app.get("/fetch", (req, res) => {
-//   res.send(`a = ${a}`);
-// });
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
