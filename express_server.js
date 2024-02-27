@@ -81,6 +81,12 @@ app.post("/urls/:shortCode/delete", (req, res) => {
   res.redirect('/urls');
 });
 
+app.post("/urls/:shortCode", (req, res, next) => {
+  if (!urlDatabase[req.params.shortCode] && !isValidUrl(req.body.longURL)) next();
+  urlDatabase[req.params.shortCode] = req.body.longURL;
+  res.redirect('/urls');
+});
+
 
 
 app.listen(PORT, () => {
