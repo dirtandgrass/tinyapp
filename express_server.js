@@ -3,12 +3,13 @@ const app = express();
 const path = require("path");
 const PORT = 8080; // default port 8080
 const {generateRandomString, isValidUrl} = require('./util/urlUtil');
-
+const cookieParser = require('cookie-parser');
 
 app.set("view engine", "ejs");
+
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cookieParser());
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -39,7 +40,7 @@ app.get("/u/:id", (req, res, next) => {
  * @description: This endpoint renders an html view urlDatabase
  */
 app.get("/urls", (req, res) => {
-  res.render("urls_index", { urls: urlDatabase });
+  res.render("urls_index", { urls: urlDatabase, username: req.cookies.username });
 });
 
 /**
@@ -65,14 +66,14 @@ app.post("/urls", (req, res) => {
  * @description: This endpoint renders an html view of a form to create a new entry in the urlDatabase
  */
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  res.render("urls_new", {username: req.cookies.username});
 });
 
 /**
  * @description: This endpoint renders an html view of an entry in the urlDatabase
  */
 app.get("/urls/:shortCode", (req, res) => {
-  const templateVars = { id: req.params.shortCode, longURL: urlDatabase[req.params.shortCode] };
+  const templateVars = { id: req.params.shortCode, longURL: urlDatabase[req.params.shortCode],username: req.cookies.username};
   res.render("urls_show", templateVars);
 });
 

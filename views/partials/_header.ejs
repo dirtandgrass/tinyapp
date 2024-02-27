@@ -12,12 +12,19 @@
       </div>
     </div>
     <div>
-      <form action="/login" method="post" class="pe-2">
-        <input type="text" class="form-control d-inline-block" style="width:30ch" name="username"
-          placeholder="Username" />
-        <input type="submit" class="d-inline-block btn btn-primary" style="position:relative;bottom:3px"
-          value="Login" />
-      </form>
+      <% if(username) { %>
+        <span class="text-white pe-2">Welcome, <%= username %></span>
+        <form action="/logout" method="post" class="pe-2 d-inline-block">
+          <input type="submit" class="btn btn-secondary" value="Logout" />
+        </form>
+        <% } else { %>
+          <form action="/login" method="post" class="pe-2">
+            <input type="text" class="form-control d-inline-block" style="width:30ch" name="username"
+              placeholder="Username" />
+            <input type="submit" class="d-inline-block btn btn-primary" style="position:relative;bottom:3px"
+              value="Login" />
+          </form>
+          <% } %>
     </div>
   </nav>
 </header>
