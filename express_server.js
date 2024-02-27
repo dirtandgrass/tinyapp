@@ -22,6 +22,9 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+/**
+ * @description: This endpoint redirects the browser to the longURL
+ */
 app.get("/u/:id", (req, res, next) => {
   const longURL = urlDatabase[req.params.id];
   if (!longURL) {
@@ -81,6 +84,10 @@ app.post("/urls/:shortCode/delete", (req, res) => {
   res.redirect('/urls');
 });
 
+/**
+ * @description: This endpoint updates an entry in the urlDatabase
+
+ */
 app.post("/urls/:shortCode", (req, res) => {
   if (!urlDatabase[req.params.shortCode] || !isValidUrl(req.body.longURL)) {
     res.status(400).send('Invalid URL');
@@ -89,6 +96,17 @@ app.post("/urls/:shortCode", (req, res) => {
     res.redirect('/urls');
   }
 
+});
+
+app.post("/login", (req, res) => {
+  // get the referrer so can redirect to page from which the login was initiated
+  const ref = req.get('Referrer');
+  res.cookie('username', req.body.username);
+  if (ref) {
+    res.redirect(ref);
+  } else {
+    res.redirect('/urls');
+  }
 });
 
 
