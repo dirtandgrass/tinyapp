@@ -82,10 +82,13 @@ app.post("/urls/:shortCode/delete", (req, res) => {
 });
 
 app.post("/urls/:shortCode", (req, res) => {
-  if (urlDatabase[req.params.shortCode] && isValidUrl(req.body.longURL)) {
+  if (!urlDatabase[req.params.shortCode] || !isValidUrl(req.body.longURL)) {
+    res.status(400).send('Invalid URL');
+  } else {
     urlDatabase[req.params.shortCode] = req.body.longURL;
+    res.redirect('/urls');
   }
-  res.redirect('/urls');
+
 });
 
 
