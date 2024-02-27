@@ -70,6 +70,14 @@ app.get("/urls/:shortCode", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+/**
+ * @description: This endpoint deletes an entry from the urlDatabase
+ */
+app.post("/urls/:shortCode/delete", (req, res) => {
+  delete urlDatabase[req.params.shortCode];
+  res.redirect('/urls');
+});
+
 
 
 app.listen(PORT, () => {
