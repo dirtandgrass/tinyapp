@@ -99,18 +99,39 @@ app.post("/urls/:shortCode", (req, res) => {
 
 });
 
+/**
+ * @description: This endpoint logs in a user if the username is present and not empty
+ */
 app.post("/login", (req, res) => {
-  // get the referrer so can redirect to page from which the login was initiated
-  const ref = req.get('Referrer');
+  if (!req.body.username || req.body.username.trim() === '') {
+    res.status(400).send('Invalid username');
+  }
   res.cookie('username', req.body.username);
+  // get the referrer so can redirect to page from which the login was initiated
+  redirectToRefferer(req, res);
+});
+
+
+/**
+ * @description: This endpoint logs out the current user
+ */
+app.post("/logout", (req, res) => {
+  res.clearCookie('username');
+  redirectToRefferer(req, res);
+});
+
+/**
+ * @description: helper function that redirects to refferer if it exists,
+ * falls back to /urls
+ */
+const redirectToRefferer = (req, res) => {
+  const ref = req.get('Referrer');
   if (ref) {
     res.redirect(ref);
   } else {
     res.redirect('/urls');
   }
-});
-
-
+};
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
