@@ -1,9 +1,12 @@
 const express = require("express");
 const app = express();
+const path = require("path");
 const PORT = 8080; // default port 8080
 const {generateRandomString, isValidUrl} = require('./util/urlUtil');
 
+
 app.set("view engine", "ejs");
+app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
 

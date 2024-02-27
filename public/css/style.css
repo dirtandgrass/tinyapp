@@ -1,0 +1,19 @@
+input.edit_mode:checked~span {
+  display: none;
+}
+
+input.edit_mode:checked~form {
+  display: inline;
+}
+
+input.edit_mode:not(:checked)~span {
+  display: inline;
+}
+
+input.edit_mode:not(:checked)~form {
+  display: none;
+}
+
+.edit_mode {
+  display: none;
+}
