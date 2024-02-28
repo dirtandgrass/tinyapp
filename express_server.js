@@ -172,6 +172,9 @@ app.post("/login", (req, res) => {
 
 });
 
+/**
+ * @description: This endpoint renders an html view of the login template
+  */
 app.get("/login", (req, res) => {
   res.render("login", {user: req.userInfo});
 });
@@ -185,18 +188,6 @@ app.post("/logout", (req, res) => {
   res.redirect('/login');
 });
 
-/**
- * @description: helper function that redirects to refferer if it exists,
- * falls back to /urls
- */
-const redirectToRefferer = (req, res) => {
-  const ref = req.get('Referrer');
-  if (ref) {
-    res.redirect(ref);
-  } else {
-    res.redirect('/urls');
-  }
-};
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
