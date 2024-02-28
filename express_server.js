@@ -64,12 +64,14 @@ app.get("/register", (req, res) => {
  */
 app.post("/register", (req, res) => {
   const {email, password} = req.body;
-  if (!email || !password) {
+  const emailTrim = email.trim().toLowerCase();
+
+  if (!emailTrim || !password) {
     res.status(400).send('Invalid email or password');
     return;
   }
 
-  const emailTrim = req.body.email.trim().toLowerCase();
+
   const existingUser = users.findUserByEmail(emailTrim);
 
   if (existingUser) {
