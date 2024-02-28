@@ -25,6 +25,9 @@ const userModel = {
     }
     return false;
   },
+  findUserById : function(id) {
+    return this.users[id];
+  },
   addUser : function(email, password) {
     const userId = generateRandomString();
     const hashedPassword = crypto.createHash('sha1').update(password).digest('hex');
@@ -34,7 +37,6 @@ const userModel = {
       hashedPassword,
     };
 
-    console.log(this.users);
     return userId;
   }
 };

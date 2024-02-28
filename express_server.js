@@ -17,7 +17,19 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-
+/**
+ * @description: This middleware checks if the user is logged and adds the user object to the request
+ */
+app.use((req, res, next) => {
+  const userId = req.cookies.user_id;
+  if (userId) {
+    const user = users.findUserById(userId);
+    if (user) {
+      req.userInfo = user; // attach the user object to the request
+    }
+  }
+  next();
+});
 
 
 /**
@@ -44,7 +56,7 @@ app.get("/u/:id", (req, res, next) => {
  * @description: This endpoint renders an view of the registration form
  */
 app.get("/register", (req, res) => {
-  res.render("register");
+  res.render("register", {user: req.userInfo});
 });
 
 /**
@@ -74,7 +86,7 @@ app.post("/register", (req, res) => {
  * @description: This endpoint renders an html view urlDatabase
  */
 app.get("/urls", (req, res) => {
-  res.render("urls_index", { urls: urlDatabase, username: req.cookies.username });
+  res.render("urls_index", { urls: urlDatabase, user: req.userInfo });
 });
 
 /**
@@ -100,14 +112,14 @@ app.post("/urls", (req, res) => {
  * @description: This endpoint renders an html view of a form to create a new entry in the urlDatabase
  */
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new", {username: req.cookies.username});
+  res.render("urls_new", {user: req.userInfo});
 });
 
 /**
  * @description: This endpoint renders an html view of an entry in the urlDatabase
  */
 app.get("/urls/:shortCode", (req, res) => {
-  const templateVars = { id: req.params.shortCode, longURL: urlDatabase[req.params.shortCode],username: req.cookies.username};
+  const templateVars = { id: req.params.shortCode, longURL: urlDatabase[req.params.shortCode],user: req.userInfo};
   res.render("urls_show", templateVars);
 });
 
@@ -142,7 +154,7 @@ app.post("/login", (req, res) => {
   if (!req.body.username || req.body.username.trim() === '') {
     res.status(400).send('Invalid username');
   }
-  res.cookie('username', req.body.username);
+  res.cookie('user_id', req.body.username);
   // get the referrer so can redirect to page from which the login was initiated
   redirectToRefferer(req, res);
 });
@@ -152,7 +164,7 @@ app.post("/login", (req, res) => {
  * @description: This endpoint logs out the current user
  */
 app.post("/logout", (req, res) => {
-  res.clearCookie('username');
+  res.clearCookie('user_id');
   redirectToRefferer(req, res);
 });
 
