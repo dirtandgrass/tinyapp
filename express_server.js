@@ -161,6 +161,10 @@ app.post("/login", (req, res) => {
   redirectToRefferer(req, res);
 });
 
+app.get("/login", (req, res) => {
+  res.render("login", {user: req.userInfo});
+});
+
 
 /**
  * @description: This endpoint logs out the current user
