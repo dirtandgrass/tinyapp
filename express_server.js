@@ -16,6 +16,9 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+
+
+
 /**
  * @description: This endpoint renders the json of the urlDatabase
  */
@@ -34,6 +37,13 @@ app.get("/u/:id", (req, res, next) => {
   } else {
     res.redirect(longURL);
   }
+});
+
+/**
+ * @description: This endpoint renders an view of the registration form
+ */
+app.get("/register", (req, res) => {
+  res.render("register");
 });
 
 /**
@@ -98,6 +108,8 @@ app.post("/urls/:shortCode", (req, res) => {
   }
 
 });
+
+
 
 /**
  * @description: This endpoint logs in a user if the username is present and not empty
