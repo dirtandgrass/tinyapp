@@ -58,6 +58,13 @@ app.get("/u/:id", (req, res, next) => {
 app.use("/", usersRoute);
 app.use("/urls", urlsRoute);
 
+/**
+ * @description: Redirects root request to the /urls page (TBR)
+ */
+app.get("/", (req, res) => {
+  res.redirect('/urls');
+});
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
