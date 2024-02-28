@@ -1,6 +1,4 @@
-const {generateRandomString} = require('../util/urlUtil');
-const crypto = require('crypto');
-
+const {generateRandomString, getStringHash} = require('../util/util');
 
 const users = {
   userRandomID: {
@@ -30,7 +28,7 @@ const userModel = {
   },
   addUser : function(email, password) {
     const userId = generateRandomString();
-    const hashedPassword = crypto.createHash('sha1').update(password).digest('hex');
+    const hashedPassword = getStringHash(password);
     this.users[userId] = {
       id: userId,
       email,
@@ -38,6 +36,14 @@ const userModel = {
     };
 
     return userId;
+  },
+  login: function(email, password) {
+    const user = this.findUserByEmail(email);
+    if (user && user.hashedPassword === getStringHash(password)) {
+
+      return user;
+    }
+    return false;
   }
 };
 

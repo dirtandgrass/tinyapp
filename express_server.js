@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const PORT = 8080; // default port 8080
-const {generateRandomString, isValidUrl} = require('./util/urlUtil');
+const {generateRandomString, isValidUrl} = require('./util/util');
 const cookieParser = require('cookie-parser');
 const users = require('./model/users');
 
@@ -150,15 +150,26 @@ app.post("/urls/:shortCode", (req, res) => {
 
 
 /**
- * @description: This endpoint logs in a user if the username is present and not empty
+ * @description: This endpoint logs in a user if the email and password matches a user in the database
  */
 app.post("/login", (req, res) => {
-  if (!req.body.username || req.body.username.trim() === '') {
-    res.status(400).send('Invalid username');
+  const {email, password} = req.body;
+  const emailTrim = email.trim().toLowerCase();
+  if (email.trim() === '' || password.trim() === '') {
+    res.status(400).send('Invalid email or password');
+    return;
   }
-  res.cookie('user_id', req.body.username);
-  // get the referrer so can redirect to page from which the login was initiated
-  redirectToRefferer(req, res);
+  console.log(emailTrim, password);
+  const user = users.login(emailTrim, password);
+
+  if (user) {
+    res.cookie('user_id', user.id);
+    res.redirect('/urls');
+    return;
+  }
+
+  res.status(403).send('Invalid email or password'); // TODO: stay on login page, but show error message
+
 });
 
 app.get("/login", (req, res) => {
@@ -171,7 +182,7 @@ app.get("/login", (req, res) => {
  */
 app.post("/logout", (req, res) => {
   res.clearCookie('user_id');
-  redirectToRefferer(req, res);
+  res.redirect('/login');
 });
 
 /**

@@ -1,4 +1,4 @@
-
+const crypto = require('crypto');
 /**
  * Generates a random string of ascii alpha-numeric characters
  * @param {number} number of characters to generate
@@ -30,4 +30,9 @@ const isValidUrl = (url) => {
   }
 };
 
-module.exports = {generateRandomString, isValidUrl};
+const getStringHash = (text,algorithm = "sha1") => {
+  return crypto.createHash(algorithm).update(text).digest('hex');
+};
+
+
+module.exports = {generateRandomString, isValidUrl, getStringHash};
