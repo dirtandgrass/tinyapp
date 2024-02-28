@@ -4,6 +4,7 @@ const path = require("path");
 const PORT = 8080; // default port 8080
 const {generateRandomString, isValidUrl} = require('./util/urlUtil');
 const cookieParser = require('cookie-parser');
+const users = require('./model/users');
 
 app.set("view engine", "ejs");
 
@@ -44,6 +45,29 @@ app.get("/u/:id", (req, res, next) => {
  */
 app.get("/register", (req, res) => {
   res.render("register");
+});
+
+/**
+ * @description: This endpoint renders an view of the registration form
+ */
+app.post("/register", (req, res) => {
+  const {email, password} = req.body;
+  if (!email || !password) {
+    res.status(400).send('Invalid email or password');
+    return;
+  }
+
+  const emailTrim = req.body.email.trim().toLowerCase();
+  const existingUser = users.findUserByEmail(emailTrim);
+
+  if (existingUser) {
+    res.status(400).send('That Email address is already registered');
+    return;
+  }
+
+  const userId = users.addUser(emailTrim, password);
+  res.cookie('user_id', userId).redirect('/urls');
+
 });
 
 /**
