@@ -4,12 +4,14 @@ const users = {
   userRandomID: {
     id: "userRandomID",
     email: "user@example.com",
-    password: "purple-monkey-dinosaur",
+    password: "purple-monkey-dinosaur", // testing, tbr
+    hashedPassword: "bdc2daee4dc8850c8f196db9ddba8c0bf201f62e",
   },
   user2RandomID: {
     id: "user2RandomID",
     email: "user2@example.com",
-    password: "dishwasher-funk",
+    password: "dishwasher-funk", // testing, tbr
+    hashedPassword: "e823c076bbf15024e4c27dc41f2db4a414b0dd62",
   },
 };
 
@@ -40,7 +42,6 @@ const userModel = {
   login: function(email, password) {
     const user = this.findUserByEmail(email);
     if (user && user.hashedPassword === getStringHash(password)) {
-
       return user;
     }
     return false;
