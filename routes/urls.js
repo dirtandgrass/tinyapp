@@ -1,9 +1,10 @@
+// handles the /urls endpoints
+
 const express = require('express');
 const router = express.Router();
 const {urlDatabase} = require('../model/urls');
 const {generateRandomString, isValidUrl} = require('../util/util');
 
-// handles the /urls endpoints
 
 /**
  * @description: This endpoint renders an html view urlDatabase
@@ -17,8 +18,14 @@ router.get("/",(req, res) => {
  */
 router.post("/", (req, res) => {
 
+
+  if (!req.userInfo) return res.status(401).render("error", {error: {
+    code: 401,
+    message:"You must be logged in to create a new short url"}
+  });
+
   if (!isValidUrl(req.body.longURL)) {
-    res.status(400).send('Invalid URL');
+    res.status(400).render('error', {error:{code:400, message:"Invalid URL"}});
     return;
   }
 
@@ -35,6 +42,7 @@ router.post("/", (req, res) => {
  * @description: This endpoint renders an html view of a form to create a new entry in the urlDatabase
  */
 router.get("/new", (req, res) => {
+  if (!req.userInfo) return res.redirect('/login');
   res.render("urls_new", {user: req.userInfo});
 });
 
@@ -60,7 +68,7 @@ router.post("/:shortCode/delete", (req, res) => {
  */
 router.post("/:shortCode", (req, res) => {
   if (!urlDatabase[req.params.shortCode] || !isValidUrl(req.body.longURL)) {
-    res.status(400).send('Invalid URL');
+    res.status(400).render('error', {error:{code:400, message:"Invalid URL"}});
   } else {
     urlDatabase[req.params.shortCode] = req.body.longURL;
     res.redirect('/urls');

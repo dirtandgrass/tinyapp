@@ -20,13 +20,13 @@ router.post("/register", (req, res) => {
   const emailTrim = email.trim().toLowerCase();
 
   if (!emailTrim || !password) {
-    res.status(400).send('Invalid email or password');
+    res.status(400).render('error', {error:{code:400, message:"Invalid email or password"}});
     return;
   }
   const existingUser = users.findUserByEmail(emailTrim);
 
   if (existingUser) {
-    res.status(400).send('That Email address is already registered');
+    res.status(400).render('error', {error:{code:400, message:"That Email address is already registered"}});
     return;
   }
 
@@ -42,7 +42,7 @@ router.post("/login", (req, res) => {
   const {email, password} = req.body;
   const emailTrim = email.trim().toLowerCase();
   if (email.trim() === '' || password.trim() === '') {
-    res.status(400).send('Invalid email or password');
+    res.status(400).render('error', {error:{code:400, message:"Invalid email or password"}});
     return;
   }
   console.log(emailTrim, password);
@@ -54,7 +54,7 @@ router.post("/login", (req, res) => {
     return;
   }
 
-  res.status(403).send('Invalid email or password'); // TODO: stay on login page, but show error message
+  res.status(403).render('error', {error:{code:403, message:"Incorrect email or password"}});
 
 });
 
