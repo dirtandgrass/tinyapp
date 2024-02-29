@@ -13,12 +13,19 @@
   <%- include('partials/_header') %>
 
     <main style="margin: 1em;">
-      <h1>
-        <%= error.code %>
-      </h1>
-      <h2>
-        <%= error.message %>
-      </h2>
+      <% if (error.code) { %>
+        <h1>
+          <%= error.code %>
+        </h1>
+        <% } %>
+          <h2>
+            <%= error.message %>
+          </h2>
+          <% if (error.extended) { %>
+            <p>
+              <%- error.extended %>
+            </p>
+            <% } %>
     </main>
     <%- include('partials/_tail') %>
 </body>

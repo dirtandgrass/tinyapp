@@ -10,6 +10,10 @@ const {generateRandomString, isValidUrl} = require('../util/util');
  * @description: This endpoint renders an html view urlDatabase
  */
 router.get("/",(req, res) => {
+  if (!req.userInfo) return res.render("error", {error:{
+    message: "You must be logged in to view this page",
+    extended:'Please <a href="/register">register</a> or <a href="/login">login</a> to view and create tiny urls',
+  }});
   res.render("urls_index", { urls: urlDatabase, user: req.userInfo });
 });
 
