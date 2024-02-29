@@ -5,9 +5,20 @@ const urlDatabase = {
   },
   i3BoGr: {
     longURL: "https://www.google.ca",
-    userId: "aJ48lW",
+    userId: "user2RandomID",
   },
 };
 
+const urlsForUser = (id) => {
+  const userUrls = {};
+  for (let url in urlDatabase) {
+    if (urlDatabase[url].userId === id) {
+      userUrls[url] = urlDatabase[url];
+    }
+  }
+  return userUrls;
+};
 
-module.exports = {urlDatabase};
+
+
+module.exports = {urlDatabase, urlsForUser};

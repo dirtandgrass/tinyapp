@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const {urlDatabase} = require('../model/urls');
+const {urlDatabase, urlsForUser} = require('../model/urls');
 const {generateRandomString, isValidUrl} = require('../util/util');
 
 
@@ -16,13 +16,7 @@ router.get("/",(req, res) => {
   }});
 
   // filter the urlDatabase to only show urls created by the logged in user
-  const userUrls = {};
-  for (const shortCode in urlDatabase) {
-    console.log(urlDatabase[shortCode], req.userInfo.id);
-    if (urlDatabase[shortCode].userId === req.userInfo.id) {
-      userUrls[shortCode] = urlDatabase[shortCode];
-    }
-  }
+  const userUrls = urlsForUser(req.userInfo.id);
 
   res.render("urls_index", { urls: userUrls, user: req.userInfo });
 });
@@ -63,11 +57,28 @@ router.get("/new", (req, res) => {
   res.render("urls_new", {user: req.userInfo});
 });
 
+
 /**
  * @description: This endpoint renders an html view of an entry in the urlDatabase
  */
 router.get("/:shortCode", (req, res) => {
-  const templateVars = { id: req.params.shortCode, urlInfo: urlDatabase[req.params.shortCode],user: req.userInfo};
+  if (!req.userInfo) return res.render("error", {error:{
+    message: "You must be logged in to view this page",
+    extended:'Please <a href="/register">register</a> or <a href="/login">login</a> to view and create tiny urls',
+  }});
+
+  const entry = urlDatabase[req.params.shortCode];
+  if (!entry) {
+    res.status(400).render('error', {error:{code:400, message:"Tiny URL not found"}});
+    return;
+  }
+
+  if (entry.userId !== req.userInfo.id) {
+    res.status(403).render('error', {error:{code:403, message:"You do not have permission to perform this action"}});
+    return;
+  }
+
+  const templateVars = { id: req.params.shortCode, urlInfo: entry,user: req.userInfo};
   res.render("urls_show", templateVars);
 });
 
@@ -75,22 +86,37 @@ router.get("/:shortCode", (req, res) => {
  * @description: This endpoint deletes an entry from the urlDatabase
  */
 router.post("/:shortCode/delete", (req, res) => {
+  if (!req.userInfo) return res.render("error", {error:{
+    message: "You must be logged in to view this page",
+    extended:'Please <a href="/register">register</a> or <a href="/login">login</a> to view and create tiny urls',
+  }});
+  if (urlDatabase[req.params.shortCode].userId !== req.userInfo.id) {
+    res.status(403).render('error', {error:{code:403, message:"You do not have permission to perform this action"}});
+    return;
+  }
   delete urlDatabase[req.params.shortCode];
   res.redirect('/urls');
 });
 
 /**
  * @description: This endpoint updates an entry in the urlDatabase
-
  */
 router.post("/:shortCode", (req, res) => {
+  if (!req.userInfo) return res.render("error", {error:{
+    message: "You must be logged in to view this page",
+    extended:'Please <a href="/register">register</a> or <a href="/login">login</a> to view and create tiny urls',
+  }});
+  if (urlDatabase[req.params.shortCode].userId !== req.userInfo.id) {
+    res.status(403).render('error', {error:{code:403, message:"You do not have permission to perform this action"}});
+    return;
+  }
   if (!urlDatabase[req.params.shortCode] || !isValidUrl(req.body.longURL)) {
     res.status(400).render('error', {error:{code:400, message:"Tiny URL not found"}});
-  } else {
-    urlDatabase[req.params.shortCode].longURL = req.body.longURL;
-    res.redirect('/urls');
+    return;
   }
 
+  urlDatabase[req.params.shortCode].longURL = req.body.longURL;
+  res.redirect('/urls');
 });
 
 
