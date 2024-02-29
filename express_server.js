@@ -45,7 +45,7 @@ app.get("/urls.json", (req, res) => {
  * @description: This endpoint redirects the browser to the url based on a shortcode
  */
 app.get("/u/:id", (req, res, next) => {
-  const longURL = urlDatabase[req.params.id];
+  const longURL = urlDatabase[req.params.id].longURL;
   if (!longURL) {
     res.status(404).render("error",{error:{code:404,message:'URL not found'}});
     next();

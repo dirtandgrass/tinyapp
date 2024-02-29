@@ -13,7 +13,7 @@
     <div class="card text-center">
       <div class="card-header"></div>
       <div class="card-body">
-        <h5 class="card-title">TinyURL for: <%= longURL %>
+        <h5 class="card-title">TinyURL for: <%= urlInfo.longURL %>
         </h5>
         <p class="card-text">
           Short URL ID: <a href="/u/<%= id %>">
@@ -27,7 +27,7 @@
           <form action="/urls/<%= id %>" method="POST">
             <input type="text" class="w-50 p-1" name="longURL" required
               pattern="[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"
-              value="<%= longURL %>" />
+              value="<%= urlInfo.longURL %>" />
             <!-- Pattern from https://stackoverflow.com/questions/58070841/pattern-in-html5-input-type-url-validation-->
             <button type="submit" class="btn btn-primary">Save</button>
           </form>

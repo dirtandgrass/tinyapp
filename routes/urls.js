@@ -24,16 +24,19 @@ router.post("/", (req, res) => {
     message:"You must be logged in to create a new short url"}
   });
 
+  const userId = req.userInfo.id;
+  const longURL = req.body.longURL;
+
   if (!isValidUrl(req.body.longURL)) {
     res.status(400).render('error', {error:{code:400, message:"Invalid URL"}});
     return;
   }
 
   let shortCode = generateRandomString();
-  while (urlDatabase[shortCode]) {
+  while (urlDatabase[shortCode]) { // make sure we don't overwrite an existing short code
     shortCode = generateRandomString();
   }
-  urlDatabase[shortCode] = req.body.longURL;
+  urlDatabase[shortCode] = {longURL, userId};
 
   res.redirect(`/urls/${shortCode}`);
 });
@@ -50,7 +53,7 @@ router.get("/new", (req, res) => {
  * @description: This endpoint renders an html view of an entry in the urlDatabase
  */
 router.get("/:shortCode", (req, res) => {
-  const templateVars = { id: req.params.shortCode, longURL: urlDatabase[req.params.shortCode],user: req.userInfo};
+  const templateVars = { id: req.params.shortCode, urlInfo: urlDatabase[req.params.shortCode],user: req.userInfo};
   res.render("urls_show", templateVars);
 });
 
@@ -68,9 +71,9 @@ router.post("/:shortCode/delete", (req, res) => {
  */
 router.post("/:shortCode", (req, res) => {
   if (!urlDatabase[req.params.shortCode] || !isValidUrl(req.body.longURL)) {
-    res.status(400).render('error', {error:{code:404, message:"URL not found"}});
+    res.status(400).render('error', {error:{code:400, message:"Tiny URL not found"}});
   } else {
-    urlDatabase[req.params.shortCode] = req.body.longURL;
+    urlDatabase[req.params.shortCode].longURL = req.body.longURL;
     res.redirect('/urls');
   }
 
