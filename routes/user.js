@@ -8,6 +8,7 @@ const users = require('../model/users');
  * @description: This endpoint renders an view of the registration form
  */
 router.get("/register", (req, res) => {
+  if (req.userInfo) return res.redirect('/urls'); // if the user is already logged in, redirect to /urls
   res.render("register", {user: req.userInfo});
 });
 
@@ -61,6 +62,7 @@ router.post("/login", (req, res) => {
  * @description: This endpoint renders an html view of the login template
   */
 router.get("/login", (req, res) => {
+  if (req.userInfo) return res.redirect('/urls'); // if the user is already logged in, redirect to /urls
   res.render("login", {user: req.userInfo});
 });
 
