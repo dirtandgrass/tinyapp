@@ -1,8 +1,8 @@
 const {generateRandomString, getStringHash} = require('../util/util');
 
 const users = {
-  userRandomID: {
-    id: "userRandomID",
+  aJ48lW: {
+    id: "aJ48lW",
     email: "user@example.com",
     password: "purple-monkey-dinosaur", // testing, tbr
     hashedPassword: "bdc2daee4dc8850c8f196db9ddba8c0bf201f62e",

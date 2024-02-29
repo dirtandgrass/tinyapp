@@ -25,6 +25,7 @@ app.use(cookieParser());
  */
 app.use((req, res, next) => {
   const userId = req.cookies.user_id;
+
   if (userId) {
     const user = users.findUserById(userId);
     if (user) {

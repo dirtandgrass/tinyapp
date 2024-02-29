@@ -14,7 +14,17 @@ router.get("/",(req, res) => {
     message: "You must be logged in to view this page",
     extended:'Please <a href="/register">register</a> or <a href="/login">login</a> to view and create tiny urls',
   }});
-  res.render("urls_index", { urls: urlDatabase, user: req.userInfo });
+
+  // filter the urlDatabase to only show urls created by the logged in user
+  const userUrls = {};
+  for (const shortCode in urlDatabase) {
+    console.log(urlDatabase[shortCode], req.userInfo.id);
+    if (urlDatabase[shortCode].userId === req.userInfo.id) {
+      userUrls[shortCode] = urlDatabase[shortCode];
+    }
+  }
+
+  res.render("urls_index", { urls: userUrls, user: req.userInfo });
 });
 
 /**

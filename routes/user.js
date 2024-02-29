@@ -45,7 +45,7 @@ router.post("/login", (req, res) => {
     res.status(400).render('error', {error:{code:400, message:"Invalid email or password"}});
     return;
   }
-  console.log(emailTrim, password);
+
   const user = users.login(emailTrim, password);
 
   if (user) {
