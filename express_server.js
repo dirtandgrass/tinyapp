@@ -47,7 +47,7 @@ app.get("/urls.json", (req, res) => {
 app.get("/u/:id", (req, res, next) => {
   const longURL = urlDatabase[req.params.id];
   if (!longURL) {
-    res.status(404).send('URL not found');
+    res.status(404).render("error",{error:{code:404,message:'URL not found'}});
     next();
   } else {
     res.redirect(longURL);

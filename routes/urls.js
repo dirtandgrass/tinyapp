@@ -68,7 +68,7 @@ router.post("/:shortCode/delete", (req, res) => {
  */
 router.post("/:shortCode", (req, res) => {
   if (!urlDatabase[req.params.shortCode] || !isValidUrl(req.body.longURL)) {
-    res.status(400).render('error', {error:{code:400, message:"Invalid URL"}});
+    res.status(400).render('error', {error:{code:404, message:"URL not found"}});
   } else {
     urlDatabase[req.params.shortCode] = req.body.longURL;
     res.redirect('/urls');
