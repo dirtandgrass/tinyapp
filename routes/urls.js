@@ -25,8 +25,6 @@ router.get("/",(req, res) => {
  * @description: This endpoint endpoint creates a new entry in the urlDatabase
  */
 router.post("/", (req, res) => {
-
-
   if (!req.userInfo) return res.status(401).render("error", {error: {
     code: 401,
     message:"You must be logged in to create a new short url"}
@@ -50,18 +48,10 @@ router.post("/", (req, res) => {
 });
 
 /**
- * @description: This endpoint renders an html view of a form to create a new entry in the urlDatabase
+ * @description: This endpoint renders an html view of an entry in the urlDatabase,
+ * regex filter to prevent conflict with /new
  */
-router.get("/new", (req, res) => {
-  if (!req.userInfo) return res.redirect('/login');
-  res.render("urls_new", {user: req.userInfo});
-});
-
-
-/**
- * @description: This endpoint renders an html view of an entry in the urlDatabase
- */
-router.get("/:shortCode", (req, res) => {
+router.get("/:shortCode([a-zA-Z0-9]{4,8})", (req, res) => {
   if (!req.userInfo) return res.render("error", {error:{
     message: "You must be logged in to view this page",
     extended:'Please <a href="/register">register</a> or <a href="/login">login</a> to view and create tiny urls',
@@ -81,6 +71,17 @@ router.get("/:shortCode", (req, res) => {
   const templateVars = { id: req.params.shortCode, urlInfo: entry,user: req.userInfo};
   res.render("urls_show", templateVars);
 });
+
+
+/**
+ * @description: This endpoint renders an html view of a form to create a new entry in the urlDatabase
+ */
+router.get("/new", (req, res) => {
+  if (!req.userInfo) return res.redirect('/login');
+  res.render("urls_new", {user: req.userInfo});
+});
+
+
 
 /**
  * @description: This endpoint deletes an entry from the urlDatabase
