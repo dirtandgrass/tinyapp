@@ -41,17 +41,23 @@ const userModel = {
    * @returns {object|boolean} user object if the id is found, false otherwise
    */
   findUserById : function(id) {
-    return this.users[id];
+    const user = this.users[id];
+    return user !== undefined ? user : false;
   },
   /**
    * Adds a new user to the users object
    * @param {string} email
    * @param {string} password
-   * @returns {string} the id of the new user
+   * @returns {string|boolean} the id of the new user or false if the user cannot be added
    */
   addUser : function(email, password) {
     const userId = generateRandomString();
     const hashedPassword = getStringHash(password);
+
+    const existingUser = this.findUserByEmail(email);
+    if (existingUser) {
+      return false;
+    }
 
     this.users[userId] = {
       id: userId,
