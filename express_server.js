@@ -1,11 +1,11 @@
 const PORT = 8080; // default port 8080
-
+const COOKIE_SECRET = process.env.COOKIE_SECRET || "THE SEKRAT COOKIE RECIPE";
 const express = require("express");
 const app = express();
 
 const path = require("path");
 
-const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 const users = require('./model/users');
 const {urlDatabase} = require('./model/urls');
 
@@ -16,7 +16,10 @@ app.set("view engine", "ejs");
 
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(cookieSession({
+  name: 'session',
+  secret: COOKIE_SECRET
+}));
 
 
 
@@ -24,7 +27,7 @@ app.use(cookieParser());
  * @description: This middleware checks if the user is logged and adds the user object to the request
  */
 app.use((req, res, next) => {
-  const userId = req.cookies.user_id;
+  const userId = req.session.userId;
 
   if (userId) {
     const user = users.findUserById(userId);

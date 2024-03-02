@@ -8,6 +8,9 @@ const userModel = {
   users,
   authUser : function(email, password) {
     const user = this.findUserByEmail(email);
+    if (!user) {
+      return false;
+    }
     if (compareStringHash(password, user.hashedPassword)) {
       return user;
     }
@@ -16,6 +19,7 @@ const userModel = {
   findUserByEmail : function(email) {
     for (let user in this.users) {
       if (this.users[user].email === email) {
+        console.log('user found', this.users[user]);
         return this.users[user];
       }
     }

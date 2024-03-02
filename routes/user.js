@@ -31,7 +31,8 @@ router.post("/register", (req, res) => {
   }
 
   const userId = users.addUser(emailTrim, password);
-  res.cookie('user_id', userId).redirect('/urls');
+  req.session.userId = userId;
+  res.redirect('/urls');
 
 });
 
@@ -49,7 +50,7 @@ router.post("/login", (req, res) => {
   const user = users.authUser(emailTrim, password);
 
   if (user) {
-    res.cookie('user_id', user.id);
+    req.session.userId = user.id;
     res.redirect('/urls');
     return;
   }
@@ -71,7 +72,7 @@ router.get("/login", (req, res) => {
  * @description: This endpoint logs out the current user
  */
 router.post("/logout", (req, res) => {
-  res.clearCookie('user_id');
+  req.session = null;
   res.redirect('/login');
 });
 
