@@ -8,7 +8,11 @@ const urlDatabase = {
     userId: "user2RandomID",
   },
 };
-
+/**
+ * Retrieves all short urls for a given user id
+ * @param {string} id
+ * @returns an array of short url objects
+ */
 const urlsForUser = (id) => {
   const userUrls = {};
   for (let url in urlDatabase) {
