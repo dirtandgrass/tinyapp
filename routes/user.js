@@ -46,7 +46,7 @@ router.post("/login", (req, res) => {
     return;
   }
 
-  const user = users.login(emailTrim, password);
+  const user = users.authUser(emailTrim, password);
 
   if (user) {
     res.cookie('user_id', user.id);

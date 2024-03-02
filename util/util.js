@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 /**
  * Generates a random string of ascii alpha-numeric characters
  * @param {number} number of characters to generate
@@ -30,9 +30,13 @@ const isValidUrl = (url) => {
   }
 };
 
-const getStringHash = (text,algorithm = "sha1") => {
-  return crypto.createHash(algorithm).update(text).digest('hex');
+const getStringHash = (text) => {
+  return bcrypt.hashSync(text, 10);
+};
+
+const compareStringHash = (text, hash) => {
+  return bcrypt.compareSync(text, hash);
 };
 
 
-module.exports = {generateRandomString, isValidUrl, getStringHash};
+module.exports = {generateRandomString, isValidUrl, getStringHash, compareStringHash};
