@@ -1,6 +1,7 @@
 const PORT = 8080; // default port 8080
 const COOKIE_SECRET = process.env.COOKIE_SECRET || "THE SEKRAT COOKIE RECIPE";
 const express = require("express");
+const methodOverride = require('method-override');
 const app = express();
 
 const path = require("path");
@@ -14,6 +15,8 @@ const usersRoute = require('./routes/user');
 
 app.set("view engine", "ejs");
 
+
+app.use(methodOverride('_method'));
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

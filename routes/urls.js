@@ -83,7 +83,7 @@ router.get("/new", (req, res) => {
 /**
  * @description: This endpoint deletes an entry from the urlDatabase
  */
-router.post("/:shortCode/delete", (req, res) => {
+router.delete("/:shortCode", (req, res) => {
   if (!req.userInfo) return res.render("error", {error:{
     message: "You must be logged in to view this page",
     extended:'Please <a href="/register">register</a> or <a href="/login">login</a> to view and create tiny urls',
@@ -99,7 +99,7 @@ router.post("/:shortCode/delete", (req, res) => {
 /**
  * @description: This endpoint updates an entry in the urlDatabase
  */
-router.post("/:shortCode", (req, res) => {
+router.put("/:shortCode", (req, res) => {
   if (!req.userInfo) return res.render("error", {error:{
     message: "You must be logged in to view this page",
     extended:'Please <a href="/register">register</a> or <a href="/login">login</a> to view and create tiny urls',

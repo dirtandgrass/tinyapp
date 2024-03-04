@@ -41,7 +41,7 @@
                 <a class="btn btn-secondary" href="/urls/<%= id %>">Edit</a>
               </td>
               <td>
-                <form action="/urls/<%= id %>/delete" method="POST">
+                <form action="/urls/<%= id %>?_method=DELETE" method="POST">
                   <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
               </td>
