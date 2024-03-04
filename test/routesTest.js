@@ -54,7 +54,6 @@ describe("Login and Access Control Test", () => {
       return agent
         .get("/urls/b6UTxQ")
         .then((res) => {
-          console.log(res.text);
           expect(res).to.have.status(401);
           expect(res.text).to.include("You must be logged in to view this page");
         });
@@ -75,8 +74,7 @@ describe("Login and Access Control Test", () => {
       return agent
         .post("/login")
         .send({ email: "user2@example.com", password: "dishwasher-funk" })
-        .then((loginRes) => {
-          console.log(loginRes.status); // 200
+        .then(() => {
           // Step 2: Make a GET request to a protected resource
           return agent.get("/urls/b6UTxQ").then((accessRes) => {
           // Step 3: Expect the status code to be 403
@@ -92,8 +90,7 @@ describe("Login and Access Control Test", () => {
       return agent
         .post("/login")
         .send({ email: "user@example.com", password: "purple-monkey-dinosaur" })
-        .then((loginRes) => {
-          console.log(loginRes.status); // 200
+        .then(() => {
           // Step 2: Make a GET request to a protected resource
           return agent.get("/urls/" + shortCode).then((accessRes) => {
           // Step 3: Expect the status code to be 403

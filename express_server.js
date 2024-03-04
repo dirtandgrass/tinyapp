@@ -10,6 +10,8 @@ const cookieSession = require('cookie-session');
 const users = require('./model/users');
 const {urlDatabase} = require('./model/urls');
 
+const {generateRandomString} = require('./util/util');
+
 const urlsRoute = require('./routes/urls');
 const usersRoute = require('./routes/user');
 
@@ -20,6 +22,7 @@ app.use(methodOverride('_method'));
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
 app.use(cookieSession({
   name: 'session',
   secret: COOKIE_SECRET
@@ -43,6 +46,16 @@ app.use((req, res, next) => {
 });
 
 /**
+ * @description: This middleware sets a cookie to track unique visitors
+ */
+app.use((req, res, next) => {
+  if (!req.session.visitorId) {
+    req.session.visitorId = generateRandomString(4);
+  }
+  next();
+});
+
+/**
  * @description: This endpoint renders the json of the urlDatabase
  */
 app.get("/urls.json", (req, res) => {
@@ -53,12 +66,24 @@ app.get("/urls.json", (req, res) => {
  * @description: This endpoint redirects the browser to the url based on a shortcode
  */
 app.get("/u/:id", (req, res, next) => {
-  const longURL = urlDatabase[req.params.id].longURL;
-  if (!longURL) {
+  const entry = urlDatabase[req.params.id];
+
+  if (!entry || !entry.longURL) {
     res.status(404).render("error",{error:{code:404,message:'URL not found'}});
     next();
   } else {
-    res.redirect(longURL);
+
+    entry.visitCount = (entry.visitCount || 0) + 1;
+
+    // store visitor ids in a set
+    entry.visitors = entry.visitors || new Set();
+    entry.visitors.add(req.session.visitorId);
+
+    // store visit details
+    if (!entry.visits) entry.visits = [];
+    entry.visits.push({visitorId: req.session.visitorId, timestamp: new Date(), remoteIP: req.ip});
+
+    res.redirect(entry.longURL);
   }
 });
 

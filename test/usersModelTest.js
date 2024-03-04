@@ -53,11 +53,10 @@ describe('userModel', function() {
       const password = 'password';
       userModel.addUser(email, password);
 
-      console.log(userModel.users);
       const userCountAfterAdd1 = Object.keys(userModel.users).length;
 
       const userId = userModel.addUser(email, password);
-      console.log(userModel.users);
+
       const userCountAfterAdd2 = Object.keys(userModel.users).length;
 
       assert.equal(userCountAfterAdd1, userCountAfterAdd2);
