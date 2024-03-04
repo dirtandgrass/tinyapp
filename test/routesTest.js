@@ -64,7 +64,7 @@ describe("Login and Access Control Test", () => {
         .get("/urls/000AAA")
         .then((res) => {
           expect(res).to.have.status(404);
-          expect(res.text).to.include("The requested URL does not exist");
+          expect(res.text).to.include("Tiny URL not found");
         });
     });
 
@@ -79,7 +79,7 @@ describe("Login and Access Control Test", () => {
           return agent.get("/urls/b6UTxQ").then((accessRes) => {
           // Step 3: Expect the status code to be 403
             expect(accessRes).to.have.status(403);
-            expect(accessRes.text).to.include("You do not have permission to access this URL");
+            expect(accessRes.text).to.include("You do not have permission to perform this action");
           });
         });
     });
