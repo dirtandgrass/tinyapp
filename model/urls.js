@@ -21,7 +21,7 @@ const urlModel = {
    * @param {string} userId
    * @returns an array of short url objects
    */
-  urlsForUser : function(userId) {
+  forUser : function(userId) {
     const userUrls = {};
     for (let url in this.urlDatabase) {
       if (this.urlDatabase[url].userId === userId) {
@@ -45,7 +45,7 @@ const urlModel = {
    * @param {Date} dateCreated
    * @returns {string} the short code for the new entry
    */
-  addShortUrl : function(longURL, userId, dateCreated = new Date()) {
+  add : function(longURL, userId, dateCreated = new Date()) {
     let shortCode = generateRandomString();
     while (this.doesExist(shortCode)) { // make sure we don't overwrite an existing short code
       shortCode = generateRandomString();
@@ -57,14 +57,14 @@ const urlModel = {
    * Gets a short url object from the urlDatabase
    * @param {string} shortCode
    */
-  getShortUrl : function(shortCode) {
+  get : function(shortCode) {
     return this.urlDatabase[shortCode];
   },
   /**
    * Deletes a short url from the urlDatabase
    * @param {string} shortCode
    */
-  deleteShortUrl : function(shortCode) {
+  delete : function(shortCode) {
     if (!this.doesExist(shortCode)) throw new Error("Short URL not found");
     delete this.urlDatabase[shortCode];
   },
@@ -73,7 +73,7 @@ const urlModel = {
    * @param {string} shortCode
    * @param {string} longURL
    */
-  updateShortUrl : function(shortCode, longURL) {
+  update : function(shortCode, longURL) {
     if (!this.doesExist(shortCode)) throw new Error("Short URL not found");
     this.urlDatabase[shortCode].longURL = longURL;
   }

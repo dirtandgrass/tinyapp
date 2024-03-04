@@ -13,7 +13,7 @@ router.get("/",(req, res) => {
   if (!req.userInfo) return res.redirect('/login');
 
   // filter the urlDatabase to only show urls created by the logged in user
-  const userUrls = urlModel.urlsForUser(req.userInfo.id);
+  const userUrls = urlModel.forUser(req.userInfo.id);
 
   res.render("urls_index", { urls: userUrls, user: req.userInfo });
 });
@@ -35,7 +35,7 @@ router.post("/", (req, res) => {
     return;
   }
 
-  const shortCode = urlModel.addShortUrl(longURL, userId);
+  const shortCode = urlModel.add(longURL, userId);
 
   res.redirect(`/urls/${shortCode}`);
 });
@@ -47,7 +47,7 @@ router.post("/", (req, res) => {
 router.get("/:shortCode([a-zA-Z0-9]{4,8})", (req, res) => {
 
 
-  const entry = urlModel.getShortUrl(req.params.shortCode);
+  const entry = urlModel.get(req.params.shortCode);
   if (!entry) {
     res.status(404).render('error', {error:{code:404, message:"Tiny URL not found"}});
     return;
@@ -86,11 +86,11 @@ router.delete("/:shortCode", (req, res) => {
     message: "You must be logged in to view this page",
     extended:'Please <a href="/register">register</a> or <a href="/login">login</a> to view and create tiny urls',
   }});
-  if (urlModel.getShortUrl(req.params.shortCode).userId !== req.userInfo.id) {
+  if (urlModel.get(req.params.shortCode).userId !== req.userInfo.id) {
     res.status(403).render('error', {error:{code:403, message:"You do not have permission to perform this action"}});
     return;
   }
-  urlModel.deleteShortUrl(req.params.shortCode);
+  urlModel.delete(req.params.shortCode);
   res.redirect('/urls');
 });
 
@@ -103,7 +103,7 @@ router.put("/:shortCode", (req, res) => {
     extended:'Please <a href="/register">register</a> or <a href="/login">login</a> to view and create tiny urls',
   }});
 
-  const shortUrl = urlModel.getShortUrl(req.params.shortCode);
+  const shortUrl = urlModel.get(req.params.shortCode);
   if (!shortUrl || !isValidUrl(req.body.longURL)) {
     res.status(400).render('error', {error:{code:400, message:"Tiny URL not found"}});
     return;
@@ -113,7 +113,7 @@ router.put("/:shortCode", (req, res) => {
     return;
   }
 
-  urlModel.updateShortUrl(req.params.shortCode, req.body.longURL);
+  urlModel.update(req.params.shortCode, req.body.longURL);
   res.redirect('/urls');
 });
 
