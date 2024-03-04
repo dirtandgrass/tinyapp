@@ -1,7 +1,7 @@
 const urlDatabase = {
   b6UTxQ: {
     longURL: "https://www.tsn.ca",
-    userId: "aJ48lW",
+    userId: "userRandomID",
   },
   i3BoGr: {
     longURL: "https://www.google.ca",

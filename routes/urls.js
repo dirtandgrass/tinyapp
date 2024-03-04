@@ -10,10 +10,7 @@ const {generateRandomString, isValidUrl} = require('../util/util');
  * @description: This endpoint renders an html view urlDatabase
  */
 router.get("/",(req, res) => {
-  if (!req.userInfo) return res.render("error", {error:{
-    message: "You must be logged in to view this page",
-    extended:'Please <a href="/register">register</a> or <a href="/login">login</a> to view and create tiny urls',
-  }});
+  if (!req.userInfo) return res.redirect('/login');
 
   // filter the urlDatabase to only show urls created by the logged in user
   const userUrls = urlsForUser(req.userInfo.id);
@@ -52,14 +49,14 @@ router.post("/", (req, res) => {
  * regex filter to prevent conflict with /new
  */
 router.get("/:shortCode([a-zA-Z0-9]{4,8})", (req, res) => {
-  if (!req.userInfo) return res.render("error", {error:{
+  if (!req.userInfo) return res.status(401).render("error", {error:{
     message: "You must be logged in to view this page",
     extended:'Please <a href="/register">register</a> or <a href="/login">login</a> to view and create tiny urls',
   }});
 
   const entry = urlDatabase[req.params.shortCode];
   if (!entry) {
-    res.status(400).render('error', {error:{code:400, message:"Tiny URL not found"}});
+    res.status(404).render('error', {error:{code:400, message:"Tiny URL not found"}});
     return;
   }
 

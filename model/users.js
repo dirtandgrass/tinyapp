@@ -1,6 +1,18 @@
 const {generateRandomString, getStringHash, compareStringHash} = require('../util/util');
 
-const users = {};
+const users = {
+  "userRandomID": {
+    id: "userRandomID",
+    email: "user@example.com",
+    hashedPassword: getStringHash("purple-monkey-dinosaur")
+  },
+  "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    hashedPassword: getStringHash("dishwasher-funk")
+  }
+};
+
 
 const userModel = {
   users,
@@ -29,7 +41,6 @@ const userModel = {
     if (typeof email !== 'string' || email.trim() === '') return false;
     for (let user in this.users) {
       if (this.users[user].email === email) {
-        console.log('user found', this.users[user]);
         return this.users[user];
       }
     }

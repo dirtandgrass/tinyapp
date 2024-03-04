@@ -35,6 +35,7 @@ const getStringHash = (text) => {
 };
 
 const compareStringHash = (text, hash) => {
+  if (typeof text !== 'string' || typeof hash !== 'string') return false;
   return bcrypt.compareSync(text, hash);
 };
 
