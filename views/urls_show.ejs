@@ -20,10 +20,14 @@
             <%= id %>
           </a>
         </p>
+        <p class="card-text">
+          Followed: <%= urlInfo.visitCount ? urlInfo.visitCount : 0 %> time(s) by <%= urlInfo.visitors ?
+              urlInfo.visitors.size : 0 %> unique visitor(s)
+        </p>
         <div class="card bg-light">
           <h4 class="card-title">Edit</h4>
           <p class="card-text">
-            New URL:
+            Change URL:
           <form action="/urls/<%= id %>?_method=PUT" method="POST">
             <input type="text" class="w-50 p-1" name="longURL" required
               pattern="[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"
@@ -34,7 +38,31 @@
           </p>
         </div>
       </div>
-      <div class="card-footer text-muted"></div>
+      <div class="card-footer text-muted">
+        <% if(urlInfo.visits) { %>
+          <h3>Visits:</h3>
+          <table class="table">
+            <tr>
+              <th>Visitor ID</th>
+              <th>Visited At</th>
+              <th>Visitor IP</th>
+            </tr>
+            <% for(const visit of urlInfo.visits) { %>
+              <tr>
+                <td>
+                  <%= visit.visitorId %>
+                </td>
+                <td>
+                  <%= visit.timestamp %>
+                </td>
+                <td>
+                  <%= visit.remoteIP %>
+                </td>
+              </tr>
+              <% } %>
+                <% } %>
+
+      </div>
     </div>
     <%- include('partials/_tail') %>
 </body>
