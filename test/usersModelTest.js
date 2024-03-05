@@ -3,7 +3,7 @@ const { assert } = require('chai');
 const userModel = require('../model/users');
 
 
-describe('userModel', function() {
+describe('User Model', function() {
   describe('findUserByEmail', function() {
     it('should return a user with valid email', function() {
       const user = userModel.findUserByEmail('user@example.com');
