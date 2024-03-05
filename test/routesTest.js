@@ -41,6 +41,8 @@ describe("Login and Access Control Test", () => {
         dateCreated: new Date(),
       },
     };
+
+    console.log(userModel.users);
   });
 
 

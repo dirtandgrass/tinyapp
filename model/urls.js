@@ -15,7 +15,7 @@ const urlDatabase = {
 const { generateRandomString } = require('../util/util');
 
 const urlModel = {
-  urlDatabase,
+  urlDatabase:urlDatabase,
   /**
    * Retrieves all short url objects for a given user id
    * @param {string} userId
