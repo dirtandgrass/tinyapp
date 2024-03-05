@@ -5,7 +5,15 @@ A simple URL shortener app built with [Express](https://expressjs.com/)
 ## About
   First web app created for the Lighthouse Labs Web Development Bootcamp. This express.js app allows users to shorten long URLs and store them in an in-memory database. Users can also edit and delete their URLs.
 
-  ![Screenshot of the app](https://i.imgur.com/GzM0Oiy.png)
+## Features
+  - Shorten long URLs
+  - Edit and delete URLs
+  - User authentication
+  - User specific URLs
+  - In-memory database
+  - Statistics for each URL
+  - Log of visits to each url
+  - Customizable port and session cookie secret
 
 ## Getting Started
 
@@ -62,3 +70,12 @@ A simple URL shortener app built with [Express](https://expressjs.com/)
   - mocha
   - chai
   - nodemon
+
+
+  ## Screenshots
+  - Main Page
+  ![Screenshot of the main page](https://raw.githubusercontent.com/dirtandgrass/tinyapp/main/docs/main.png)
+  - Edit Page
+  ![Screenshot of the edit page](https://raw.githubusercontent.com/dirtandgrass/tinyapp/main/docs/show.png)
+  - New Short URL Page
+  ![Screenshot of the new short url page](https://raw.githubusercontent.com/dirtandgrass/tinyapp/main/docs/new.png)
