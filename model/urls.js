@@ -39,6 +39,20 @@ const urlModel = {
     return this.urlDatabase[shortCode] !== undefined;
   },
   /**
+   * Returns true if a long url exists in the urlDatabase
+   * @param {string} longURL
+   * @returns {boolean}
+   */
+  longURLExists : function(longURL) {
+    longURL = longURL.trim().toLocaleLowerCase();
+    for (let url in this.urlDatabase) {
+      if (this.urlDatabase[url].longURL === longURL) {
+        return true;
+      }
+    }
+    return false;
+  },
+  /**
    * Adds a new short url to the urlDatabase
    * @param {string} longURL
    * @param {string} userId

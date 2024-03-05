@@ -10,7 +10,11 @@ const {isValidUrl} = require('../util/util');
  * @description: This endpoint renders an html view urlDatabase
  */
 router.get("/",(req, res) => {
-  if (!req.userInfo) return res.redirect('/login');
+
+  if (!req.userInfo) return res.status(401).render("error", {error:{
+    message: "You must be logged in to view this page",
+    extended:'Please <a href="/register">register</a> or <a href="/login">login</a> to view and create tiny urls',
+  }});
 
   // filter the urlDatabase to only show urls created by the logged in user
   const userUrls = urlModel.forUser(req.userInfo.id);
@@ -48,16 +52,16 @@ router.get("/:shortCode([a-zA-Z0-9]{4,8})", (req, res) => {
 
 
   const entry = urlModel.get(req.params.shortCode);
-  if (!entry) {
-    res.status(404).render('error', {error:{code:404, message:"Tiny URL not found"}});
-    return;
-  }
+
 
   if (!req.userInfo) return res.status(401).render("error", {error:{
     message: "You must be logged in to view this page",
     extended:'Please <a href="/register">register</a> or <a href="/login">login</a> to view and create tiny urls',
   }});
-
+  if (!entry) {
+    res.status(404).render('error', {error:{code:404, message:"Tiny URL not found"}});
+    return;
+  }
   if (entry.userId !== req.userInfo.id) {
     res.status(403).render('error', {error:{code:403, message:"You do not have permission to perform this action"}});
     return;
@@ -76,16 +80,17 @@ router.get("/new", (req, res) => {
   res.render("urls_new", {user: req.userInfo});
 });
 
-
-
 /**
  * @description: This endpoint deletes an entry from the urlDatabase
  */
 router.delete("/:shortCode", (req, res) => {
-  if (!req.userInfo) return res.render("error", {error:{
-    message: "You must be logged in to view this page",
+  if (!req.userInfo) return res.status(401).render("error", {error:{
+    message: "You must be logged in to perform this action",
     extended:'Please <a href="/register">register</a> or <a href="/login">login</a> to view and create tiny urls',
   }});
+
+  if (!urlModel.get(req.params.shortCode)) return res.status(404).render('error', {error:{code:404, message:"That tiny URL does not exist"}});
+
   if (urlModel.get(req.params.shortCode).userId !== req.userInfo.id) {
     res.status(403).render('error', {error:{code:403, message:"You do not have permission to perform this action"}});
     return;
@@ -98,8 +103,8 @@ router.delete("/:shortCode", (req, res) => {
  * @description: This endpoint updates an entry in the urlDatabase
  */
 router.put("/:shortCode", (req, res) => {
-  if (!req.userInfo) return res.render("error", {error:{
-    message: "You must be logged in to view this page",
+  if (!req.userInfo) return res.status(401).render("error", {error:{
+    message: "You must be logged in to perform this action",
     extended:'Please <a href="/register">register</a> or <a href="/login">login</a> to view and create tiny urls',
   }});
 

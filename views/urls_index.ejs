@@ -20,6 +20,9 @@
           <tr>
             <th scope="col">Short URL ID</th>
             <th scope="col">Long URL</th>
+            <th scope="col">Created</th>
+            <th scope="col" class="text-center">Visits</th>
+            <th scope="col" class="text-center">Unique Visits</th>
             <th scole="col">Edit</th>
             <th scope="col">Delete</th>
           </tr>
@@ -36,6 +39,15 @@
                 <span id="longUrl_<%= id %>">
                   <%= urls[id].longURL %>
                 </span>
+              </td>
+              <td>
+                <%= urls[id].dateCreated.toLocaleDateString('en-CA') %>
+              </td>
+              <td class="text-center">
+                <%= urls[id].visitCount ? urls[id].visitCount : 0 %>
+              </td>
+              <td class="text-center">
+                <%= urls[id].visitors ? urls[id].visitors.size : 0 %>
               </td>
               <td>
                 <a class="btn btn-secondary" href="/urls/<%= id %>">Edit</a>

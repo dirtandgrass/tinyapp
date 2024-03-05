@@ -30,6 +30,7 @@ app.use(cookieSession({
 
 
 
+
 /**
  * @description: This middleware checks if the user is logged and adds the user object to the request
  */
@@ -95,7 +96,8 @@ app.use("/urls", urlsRoute);
  * @description: Redirects root request to the /urls page (TBR)
  */
 app.get("/", (req, res) => {
-  res.redirect('/urls');
+  if (req.userInfo) return res.redirect('/urls');
+  res.redirect('/login');
 });
 
 app.listen(PORT, () => {

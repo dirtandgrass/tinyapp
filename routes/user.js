@@ -55,7 +55,7 @@ router.post("/login", (req, res) => {
     return;
   }
 
-  res.status(403).render('error', {error:{code:403, message:"Incorrect email or password"}});
+  res.status(401).render('error', {error:{code:401, message:"Incorrect email or password"}});
 
 });
 

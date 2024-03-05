@@ -19,6 +19,9 @@
           Short URL ID: <a href="/u/<%= id %>">
             <%= id %>
           </a>
+        <p class="card-text">
+          Created: <%= urlInfo.dateCreated %>
+        </p>
         </p>
         <p class="card-text">
           Followed: <%= urlInfo.visitCount ? urlInfo.visitCount : 0 %> time(s) by <%= urlInfo.visitors ?
