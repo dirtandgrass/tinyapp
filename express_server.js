@@ -1,4 +1,5 @@
-const PORT = 8080; // default port 8080
+require('dotenv').config();
+const PORT = process.env.PORT || 8080;
 const COOKIE_SECRET = process.env.COOKIE_SECRET || "THE SEKRAT COOKIE RECIPE";
 const express = require("express");
 const methodOverride = require('method-override');
@@ -16,7 +17,6 @@ const urlsRoute = require('./routes/urls');
 const usersRoute = require('./routes/user');
 
 app.set("view engine", "ejs");
-
 
 app.use(methodOverride('_method'));
 app.use("/public", express.static(path.join(__dirname, "public")));
